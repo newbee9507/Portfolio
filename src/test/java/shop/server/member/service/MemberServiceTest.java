@@ -139,6 +139,7 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("삭제성공")
     void deleteMember() {
         MemberResponseDto expected
                 = new MemberResponseDto(1L, admin.getId(), admin.getNickName(), admin.getPoint());
@@ -148,6 +149,7 @@ class MemberServiceTest {
 
         assertThat(expected).isEqualTo(result);
     }
+
 
     @Test
     @DisplayName("기본 키로 조회성공")
@@ -162,8 +164,7 @@ class MemberServiceTest {
     @Test
     @DisplayName("기본 키로 조회실패")
     void findByMemberIdFail() {
-        MemberResponseDto expected
-                = new MemberResponseDto(null, admin.getId(), admin.getNickName(), admin.getPoint());
+
 
         given(repository.findMemberToResponseDto(1L)).willThrow(new MemberException(HttpStatus.NOT_FOUND, MemberExMessage.NOT_EXIST));
 

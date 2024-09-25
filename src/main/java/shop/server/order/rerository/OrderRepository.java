@@ -8,7 +8,7 @@ import shop.server.order.entity.Order;
 
 import java.util.List;
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long>, DslOrderRepository {
 
     @Query("select o from orders o left join fetch o.itemList where o.id = :orderId")
     Order findByOrderIdFetchOrderItemList(@Param("orderId") Long orderId);

@@ -29,6 +29,7 @@ public class BasketService {
     private final BasketMapper mapper;
     private final ItemService itemService;
 
+    @Transactional(readOnly = true)
     public BasketResponseDto info(Long id) {
         Basket basket = repository.findByIdFetchBasketItem(id);
         List<BasketItemResponseDto> list = mapper.basketToBasketItemResponseDtoList(basket);

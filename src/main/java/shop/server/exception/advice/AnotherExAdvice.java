@@ -15,7 +15,7 @@ import java.util.List;
 
 @Slf4j
 @RestControllerAdvice
-public class AnotherExHandler {
+public class AnotherExAdvice {
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponse> MemberArgumentValidHandler(MethodArgumentNotValidException me) {

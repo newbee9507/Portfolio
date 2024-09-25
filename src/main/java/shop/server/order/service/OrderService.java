@@ -35,6 +35,7 @@ public class OrderService {
     private final MemberService memberService;
     private final ItemService itemService;
 
+    @Transactional(readOnly = true)
     public OrderResponseDto information(Long memberId, Long orderId) {
         Member customer = memberService.findByMemberIdFetchOrderList(memberId);
         Order order = findByOrderId(orderId);
@@ -98,8 +99,7 @@ public class OrderService {
         if (!customer.getOrderList().contains(order)) {
             throw new OrderException(HttpStatus.UNAUTHORIZED, OrderExMessage.UNAUTHORIZED);
         }
-        List<Long> orderItemIds = order.getItemList().stream().map(OrderItem::getOrderItemId).toList();
-        repository.deleteAllOrderItems(orderItemIds);
+        repository.deleteOrder(order);
         return "OK";
     }
 
