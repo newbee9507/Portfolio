@@ -33,7 +33,6 @@ public class MemberService {
     private final MemberRepository repository;
     private final MemberAuthorityUtils authorityUtils;
 
-    @Transactional
     public MemberResponseDto save(MemberSaveDto saveDto) {
         Map<Boolean, String> result = repository.checkExistIdOrNickName(saveDto);
         if (result.isEmpty()) {
