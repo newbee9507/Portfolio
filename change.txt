@@ -1,0 +1,35 @@
+10-10
+1.MemberRepositoryTest 작성
+
+
+2.dslMemberRepository delete 개선
+
+targetMember의 조회 쿼리중, basket은 회원 가입시에 반드시 가지게끔 작성했으므로 innerJoin으로 바꿈.
+다만 basketItem은 basket에 존재하지 않을 수 있으니 leftJoin으로.
+
+orderList조회시, '삭제 대상 회원이 주문내역을 가지고 있는가'에 초점을 맞춰야 함.
+없으면 null을 반환하면 그만이니 이너조인.
+주문내역이 있다면, 당연하게도 주문한 상품이 반드시 존재할테니 orderItem과의 조인도 이너조인.
+
+3.findByIdFetchOrderList 개선 및 테스트
+
+Member 엔티티의 orderList가 비어있다면 해당 회원은 주문내역을 가지지 않음.
+주문내역의 수정을 쉽게하기 위해 해당 메서드를 통해 엔티티를 페치조인으로 가져오는 것이기 때문에,
+주문내역이 존재하지 않는다면 해당 메서드는 사용될 필요가 없음.
+따라서 외부조인으로 비어있더라도 엔티티를 가져오지 않고, 내부조인으로 null을 반환하게끔 해서
+사용하는 곳에서 null일시 조치를 취하게 변경
+
+4.dslOrderRepository 삭제
+
+MemberRepositoryTest 작성 중 findByIdFetchOrderList 메서드의 사용위치가 궁금해서 찾다가 개선함.
+
+해당 클래스는 order와 orderitem 객체를 삭제하는 메서드 하나만이 존재했고, 이는 orderService의 deleteOrder 단 한 곳에서만 사용되고 있었음.
+
+deleteOrder 메서드에서는 회원엔티티의 orderList 페치조인과, 오더 엔티티의 orderItemList 페치조인을 2번 실행하고 있었는데,
+
+Member엔티티에서 고아객체를 삭제하는 설정을 해 놓았으니 굳이 오더 엔티티를 db에 요청할 필요성을 못 느낌.
+
+따라서 오더 엔티티의 db요청을 삭제하고, 회원 엔티티의 오더리스트에서 삭제하면 커밋될때 다 같이 ( 오더와 오더아이템 역시 ) 삭제 될 것이라 예상하고
+오더 엔티티는 프록시로 가져와서 회원 엔티티의 오더리스트에 존재하면 삭제함. 이때, 오더 엔티티의 equles를 id로만 비교하게끔 설정해 두었음.
+
+다만 고아객체 삭제시 벌크연산이 아닌 개별쿼리로 삭제하는 것으로 알고있기에 이를 벌크연산으로 처리할 수 있으면 더 좋을 것 같음.
