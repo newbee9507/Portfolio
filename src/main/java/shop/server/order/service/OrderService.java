@@ -24,6 +24,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -38,11 +39,11 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderResponseDto information(Long memberId, Long orderId) {
         Member customer = memberService.findByMemberIdFetchOrderList(memberId);
-        Order order = findByOrderId(orderId);
-        if (!customer.getOrderList().contains(order)) {
+        Order order = repository.getReferenceById(orderId);
+        if (Objects.isNull(customer) ||!customer.getOrderList().contains(order)) {
             throw new OrderException(HttpStatus.UNAUTHORIZED, OrderExMessage.UNAUTHORIZED);
         }
-
+        order.getItemList(); // 초기화
         return mapper.orderToOrderResponseDto(order);
     }
 
@@ -95,11 +96,11 @@ public class OrderService {
 
     public String deleteOrder(Long memberId, Long orderId) {
         Member customer = memberService.findByMemberIdFetchOrderList(memberId);
-        Order order = repository.findByOrderIdFetchOrderItemList(orderId);
-        if (!customer.getOrderList().contains(order)) {
+        Order order = repository.getReferenceById(orderId);
+        if (Objects.isNull(customer) ||!customer.getOrderList().contains(order)) {
             throw new OrderException(HttpStatus.UNAUTHORIZED, OrderExMessage.UNAUTHORIZED);
         }
-        repository.deleteOrder(order);
+        customer.getOrderList().remove(order);
         return "OK";
     }
 
