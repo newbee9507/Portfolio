@@ -229,12 +229,14 @@ public class DslMemberRepositoryImpl implements DslMemberRepository{
     public MemberResponseDto delete(Long memberId) {
         Member targetMember = queryFactory.select(member)
                 .from(member)
-                .innerJoin(member.basket, basket).fetchJoin()
-                .leftJoin(basket.basketItems, basketItem).fetchJoin()
+                .innerJoin(member.basket, basket).fetchJoin() // 회원가입시 같이 생성했으니, 반드시 존재함
+                .leftJoin(basket.basketItems, basketItem).fetchJoin() // 장바구니가 비어있을 수 있음.
                 .where(member.memberId.eq(memberId)).fetchOne();
         List<Order> orderList = queryFactory.select(order)
                 .from(order)
+                // 탈퇴할 회원이 주문내역을 갖고있지 않다면, 주문내역은 null이 와도 무방.
                 .innerJoin(member).on(order.in(member.orderList))
+                //주문내역을 하나라도 갖고있다면, 주문에는 반드시 주문된 상품이 포함되어있어야 함.
                 .innerJoin(order.itemList, orderItem).fetchJoin()
                 .where(order.client.memberId.eq(memberId)).fetch();
 
@@ -256,7 +258,8 @@ public class DslMemberRepositoryImpl implements DslMemberRepository{
     public Member findByIdFetchOrderList(Long memberId) {
         return queryFactory.select(member)
                 .from(member)
-//                .leftJoin(member.orderList).fetchJoin()
+                //해당 메서드의 사용은 '주문 내역이 있는 회원'을 주문내역과 함께 DB에서 가져올 때 이루어짐.
+                //회원이 주문내역을 갖고있지 않다면, 회원을 반환해줄 필요조차 없음.
                 .innerJoin(member.orderList).fetchJoin()
                 .where(member.memberId.eq(memberId))
                 .fetchOne();
