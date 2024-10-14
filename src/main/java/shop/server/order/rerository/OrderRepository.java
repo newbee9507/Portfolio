@@ -13,6 +13,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("select o from orders o left join fetch o.itemList where o.id = :orderId")
     Order findByOrderIdFetchOrderItemList(@Param("orderId") Long orderId);
 
+    @Query("select oi.orderItemId from OrderItem oi where oi.order.orderId = :orderId")
+    List<Long> findOrderItemIds(@Param("orderId") Long orderId);
+
     @Modifying
     @Query("delete from OrderItem oi where oi.id in :ids")
     int deleteAllOrderItems(@Param("ids")List<Long> ids);

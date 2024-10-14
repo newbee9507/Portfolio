@@ -24,11 +24,11 @@ public class BasketController {
     }
 
     @PostMapping("/add/{itemId}/{quantity}")
-    public String inputBasket(@AuthenticationPrincipal MemberDetails member,
+    public ResponseEntity<BasketResponseDto> inputBasket(@AuthenticationPrincipal MemberDetails member,
                               @PathVariable @Positive Long itemId,
                               @PathVariable @Positive Integer quantity) {
-        service.input(member.getMemberId(), itemId, quantity);
-        return "inputOK";
+        BasketResponseDto result = service.input(member.getMemberId(), itemId, quantity);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PatchMapping("/modifyQuantity/{itemId}/{quantity}")

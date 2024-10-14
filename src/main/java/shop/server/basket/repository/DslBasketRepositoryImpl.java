@@ -18,7 +18,7 @@ public class DslBasketRepositoryImpl implements DslBasketRepository{
         return queryFactory.select(basket)
                 .from(basket)
                 .leftJoin(basket.basketItems, basketItem).fetchJoin()
-                .leftJoin(basketItem.item).fetchJoin()
+                .innerJoin(basketItem.item).fetchJoin()
                 .where(basket.basketId.eq(basketId))
                 .fetchOne();
 
