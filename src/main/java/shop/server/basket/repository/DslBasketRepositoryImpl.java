@@ -21,7 +21,5 @@ public class DslBasketRepositoryImpl implements DslBasketRepository{
                 .leftJoin(basketItem.item).fetchJoin()
                 .where(basket.basketId.eq(basketId))
                 .fetchOne();
-
-
     }
 }

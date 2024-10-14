@@ -2,13 +2,9 @@ package shop.server.member.controller;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,9 +12,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 import shop.server.config.TestConfig;
 import shop.server.config.UserDetailsForTest;
 import shop.server.exception.error.member.MemberExMessage;
@@ -29,7 +25,6 @@ import shop.server.member.dtos.MemberUpdateDto;
 import shop.server.member.entity.Member;
 import shop.server.member.service.MemberService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -41,8 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @WebMvcTest(controllers = MemberController.class)
-@ExtendWith({MockitoExtension.class})
-@Import(TestConfig.class)
+@Import({TestConfig.class})
+@ActiveProfiles("WithSecurity")
 class MemberControllerTest {
 
     @Autowired

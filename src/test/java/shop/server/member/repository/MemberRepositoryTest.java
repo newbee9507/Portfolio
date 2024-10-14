@@ -2,18 +2,17 @@ package shop.server.member.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import shop.server.auth.dto.MemberDetailDto;
 import shop.server.basket.entity.Basket;
 import shop.server.config.TestConfig;
 import shop.server.member.dtos.MemberResponseDto;
 import shop.server.member.dtos.MemberSaveDto;
 import shop.server.member.entity.Member;
-import shop.server.member.entity.QMember;
 import shop.server.order.entity.Order;
 import shop.server.order.entity.OrderItem;
 
@@ -27,9 +26,10 @@ import static shop.server.member.entity.QMember.member;
         "spring.jpa.hibernate.ddl-auto=create-drop"
 })
 @Import(TestConfig.class)
+@ActiveProfiles("DBTest")
 class MemberRepositoryTest {
 
-    @PersistenceContext
+    @Autowired
     EntityManager em;
 
     @Autowired

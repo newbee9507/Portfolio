@@ -22,10 +22,7 @@ import shop.server.member.entity.Member;
 import shop.server.member.mapper.MemberMapper;
 import shop.server.member.repository.MemberRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -46,7 +43,7 @@ class MemberServiceTest {
     private MemberMapper mapper;
 
     @Mock
-    private MemberAuthorityUtils memberAuthorityUtils = new MemberAuthorityUtils();
+    private MemberAuthorityUtils memberAuthorityUtils;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -69,7 +66,7 @@ class MemberServiceTest {
 
         given(mapper.memberSaveDtotoMember(any(MemberSaveDto.class), any(List.class))).willReturn(admin);
         given(mapper.membertoMemberResponseDto(admin)).willReturn(expected);
-        given(repository.checkExistIdOrNickName(saveDto)).willReturn(new HashMap<>());
+        given(repository.checkExistIdOrNickName(saveDto)).willReturn(Collections.emptyMap());
         given(repository.save(any(Member.class))).willReturn(admin);
 
         MemberResponseDto result = service.save(saveDto);

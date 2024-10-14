@@ -28,10 +28,7 @@ public interface BasketMapper {
     }
 
     default List<BasketItemResponseDto> basketToBasketItemResponseDtoList(Basket basket) {
-        /**
-         * 바스켓아이템을 페치해서 가져오고있으니 바스켓아이템리스트를 넣고..
-         * 이거랑 딜리트쪽 쿼리만 확인하면 끝
-         */
+
         return basket.getBasketItems().stream().map(this::basketItemToBasketItemResponseDto).toList();
     }
 }

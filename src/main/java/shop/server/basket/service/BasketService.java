@@ -36,7 +36,7 @@ public class BasketService {
         return mapper.basketToBasketResponseDto(basket, list);
     }
 
-    public Basket input(Long basketId, Long itemId, Integer quantity) {
+    public BasketResponseDto input(Long basketId, Long itemId, Integer quantity) {
         Basket memberBasket = repository.findByIdFetchBasketItem(basketId);
         Item item = itemService.findById(itemId);
         BasketItem newBasketItem = new BasketItem();
@@ -48,12 +48,12 @@ public class BasketService {
             for (BasketItem oldBasketItem : realBasket) {
                 if (oldBasketItem.equals(newBasketItem)) {
                     oldBasketItem.modifyQuantity(newBasketItem.getQuantity());
-                    return memberBasket;
+                    return BasketResponseDto(memberBasket);
                 }
             }
         }
         newBasketItem.mappingToBasket(memberBasket);
-        return memberBasket;
+        return BasketResponseDto(memberBasket);
     }
 
     public BasketResponseDto modifyQuantity(Long basketId, Long itemId, Integer quantity) {
@@ -67,7 +67,7 @@ public class BasketService {
                 Integer afterQuantity = basketItem.modifyQuantity(quantity);
                 if(afterQuantity<0) basketItem.modifyQuantity( Math.abs(afterQuantity) + 1);
 
-                return mapper.basketToBasketResponseDto(basket, mapper.basketToBasketItemResponseDtoList(basket));
+                return BasketResponseDto(basket);
             }
         }
         throw new BasketException(HttpStatus.BAD_REQUEST, BasketExMessage.NOT_EXIST);
@@ -83,7 +83,7 @@ public class BasketService {
             if (itemInBasket.getItemId().equals(targetItemId)) {
                 basketItems.remove(mapper.itemToBasketItem(itemInBasket));
 
-                return mapper.basketToBasketResponseDto(basket, mapper.basketToBasketItemResponseDtoList(basket));
+                return BasketResponseDto(basket);
             }
         }
         throw new BasketException(HttpStatus.BAD_REQUEST, BasketExMessage.NOT_EXIST);
@@ -95,8 +95,11 @@ public class BasketService {
 
         List<Long> basketItemIds = basketItems.stream().map(BasketItem::getBasketItemId).toList();
         repository.deleteAllBasketItems(basketItemIds);
-        basketItems.clear();
 
+        return BasketResponseDto(basket);
+    }
+
+    private BasketResponseDto BasketResponseDto(Basket basket) {
         return mapper.basketToBasketResponseDto(basket, mapper.basketToBasketItemResponseDtoList(basket));
     }
 }

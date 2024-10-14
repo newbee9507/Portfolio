@@ -100,6 +100,8 @@ public class OrderService {
         if (Objects.isNull(customer) ||!customer.getOrderList().contains(order)) {
             throw new OrderException(HttpStatus.UNAUTHORIZED, OrderExMessage.UNAUTHORIZED);
         }
+        List<Long> orderItemIds = repository.findOrderItemIds(orderId);
+        repository.deleteAllOrderItems(orderItemIds);
         customer.getOrderList().remove(order);
         return "OK";
     }
