@@ -256,7 +256,6 @@ public class DslMemberRepositoryImpl implements DslMemberRepository{
     public Member findByIdFetchOrderList(Long memberId) {
         return queryFactory.select(member)
                 .from(member)
-//                .leftJoin(member.orderList).fetchJoin()
                 .innerJoin(member.orderList).fetchJoin()
                 .where(member.memberId.eq(memberId))
                 .fetchOne();

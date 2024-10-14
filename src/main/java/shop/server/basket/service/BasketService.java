@@ -95,7 +95,6 @@ public class BasketService {
 
         List<Long> basketItemIds = basketItems.stream().map(BasketItem::getBasketItemId).toList();
         repository.deleteAllBasketItems(basketItemIds);
-        basketItems.clear();
 
         return BasketResponseDto(basket);
     }
