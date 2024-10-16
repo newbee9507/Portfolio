@@ -19,11 +19,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-      - name: Build with Gradle
-        run: ./gradlew build
-
       - name: set env
         uses: microsoft/variable-substitution@v1
         with:
@@ -34,6 +29,12 @@ jobs:
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
 #          jwt.token.secretKey: ${{ secrets.JWT_KEY }}
 #          authority.id.admin: ${{ secrets.ADMIN }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build with Gradle
+        run: ./gradlew build
 
       - name: Docker Build
         run: |
