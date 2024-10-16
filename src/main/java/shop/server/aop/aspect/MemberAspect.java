@@ -33,7 +33,7 @@ public class MemberAspect {
             returning = "result")
     public void serviceEnd(JoinPoint joinPoint, MemberResponseDto result) {
         String request = joinPoint.getSignature().getName();
-        log.info("[{}번] 회원의 [{}] 요청 정상반환", result.getId(), request);
+        log.info("[{}번] 회원의 [{}] 요청 정상반환", result.getMemberId(), request);
     }
 
     @AfterThrowing(value = "memberPackage() && bean(*Service) && args(memberId,..)", throwing = "ex")
