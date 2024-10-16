@@ -50,7 +50,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Start Session Manager session
-        run: aws ssm start-session --target ${{ secrets.EC2_INSTANCE_ID }}
+        run: aws ssm start-session --target "${{ secrets.EC2_INSTANCE_ID }}"
 
       - name: Deploy to Server
         env:
