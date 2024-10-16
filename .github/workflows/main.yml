@@ -39,7 +39,7 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t portfolio .
-          docker tag Portfolio ${{ secrets.DOCKER_USERNAME }}/portfolio:${GITHUB_SHA::7}
+          docker tag portfolio ${{ secrets.DOCKER_USERNAME }}/portfolio:${GITHUB_SHA::7}
           docker push ${{ secrets.DOCKER_USERNAME }}/portfolio:${GITHUB_SHA::7}
 
       - name: Configure AWS credentials
