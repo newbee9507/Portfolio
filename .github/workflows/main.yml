@@ -24,11 +24,14 @@ jobs:
         with:
           files: ./src/main/resources/application.yml
         env:
-#          spring.datasource.url: ${{ secrets.DB_ENDPOINT }}
+          spring.datasource.url: ${{ secrets.DB_ENDPOINT }}
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
-#          jwt.token.secretKey: ${{ secrets.JWT_KEY }}
-#          authority.id.admin: ${{ secrets.ADMIN }}
+          spring.data.redis.host: ${{ secrets.REDIS_HOST }}
+          spring.data.redis.password: ${{ secrets.REDIS_PASSWORD }}
+          spring.data.redis.port: ${{ secrets.REDIS_PORT }}
+          jwt.token.secretKey: ${{ secrets.JWT_KEY }}
+          authority.id.admin: ${{ secrets.ADMIN }}
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
