@@ -10,4 +10,9 @@ public class homeController {
     public String homePage() {
         return "홈페이지";
     }
+
+    @GetMapping("/myShop/test")
+    public String test() {
+        return "good!";
+    }
 }
