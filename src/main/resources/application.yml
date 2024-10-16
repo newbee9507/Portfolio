@@ -19,6 +19,7 @@ spring:
   data:
     redis:
       host: 54.180.245.227
+      password: 1234
       port: 6379
 
 logging:
