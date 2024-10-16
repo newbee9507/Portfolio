@@ -64,7 +64,7 @@ jobs:
             --parameters "commands=[
             'if sudo docker ps -a --format \\'{{.Names}}\\' | grep -q \'^server$\\'; then',
             '  sudo docker stop server',
-            '  sudo docker rm server',doc
+            '  sudo docker rm server',
             'fi',
             'sudo docker pull newbee9507/portfolio:${GITHUB_SHA::7}',
             'sudo docker tag newbee9507/portfolio:${GITHUB_SHA::7} portfolio',
