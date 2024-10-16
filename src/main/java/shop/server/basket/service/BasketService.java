@@ -65,7 +65,7 @@ public class BasketService {
             Item itemInBasket = basketItem.getItem();
             if (itemInBasket.getItemId().equals(targetItemId)) {
                 Integer afterQuantity = basketItem.modifyQuantity(quantity);
-                if(afterQuantity<0) basketItem.modifyQuantity( Math.abs(afterQuantity) + 1);
+                if(afterQuantity<=0) basketItem.modifyQuantity( Math.abs(afterQuantity) + 1);
 
                 return BasketResponseDto(basket);
             }
