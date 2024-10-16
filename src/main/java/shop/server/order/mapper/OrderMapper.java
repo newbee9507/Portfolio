@@ -15,6 +15,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface OrderMapper {
@@ -26,13 +27,14 @@ public interface OrderMapper {
         result.setCustomerId(order.getClient().getId());
         result.setAddress(order.getAddress());
         result.setOrderTime(order.getOrderTime());
-        result.setArrivalTime(null);
+
+        String arrivalTime = Objects.isNull(order.getArrivalTime()) ? ""
+        result.setArrivalTime(arrivalTime);
 
         List<Long> itemIdList = order.getItemList().stream().map(OrderItem::getItem).map(Item::getItemId).toList();
         result.setItemList(itemIdList);
         return result;
     }
-    List<OrderItem> basketItemListToOrderItemList(List<BasketItem> basketItems);
 
     default List<OrderItem> itemListToOrderItemList(List<Item> itemList, List<OrderItemDto> dtoList) {
         List<OrderItem> result = new ArrayList<>(itemList.size());
