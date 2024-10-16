@@ -24,16 +24,16 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: set env
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ./src/main/resources/application.yml
-        env:
-          spring.datasource.url: ${{ secrets.DB_ENDPOINT }}
-          spring.datasource.username: ${{ secrets.DB_USERNAME }}
-          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
-          jwt.token.secretKey: ${{ secrets.JWT_KEY }}
-          authority.id.admin: ${{ secrets.ADMIN }}
+#      - name: set env
+#        uses: microsoft/variable-substitution@v1
+#        with:
+#          files: ./src/main/resources/application.yml
+#        env:
+#          spring.datasource.url: ${{ secrets.DB_ENDPOINT }}
+#          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+#          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+#          jwt.token.secretKey: ${{ secrets.JWT_KEY }}
+#          authority.id.admin: ${{ secrets.ADMIN }}
 
       - name: Docker Build
         run: |
@@ -64,7 +64,7 @@ jobs:
             --parameters "commands=[
             'if sudo docker ps -a --format \\'{{.Names}}\\' | grep -q \'^server$\\'; then',
             '  sudo docker stop server',
-            '  sudo docker rm server',
+            '  sudo docker rm server',doc
             'fi',
             'sudo docker pull newbee9507/portfolio:${GITHUB_SHA::7}',
             'sudo docker tag newbee9507/portfolio:${GITHUB_SHA::7} portfolio',

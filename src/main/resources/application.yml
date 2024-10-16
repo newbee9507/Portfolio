@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_ENDPOINT}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://port.cjgmgsyeir1t.ap-northeast-2.rds.amazonaws.com/app
+    username: admin
+    password: ag1245bh!
 #  h2:
 #    console:
 #      enabled: true
@@ -30,9 +30,9 @@ logging:
             sql: trace
 jwt:
   token:
-    secretKey: ${JWT_KEY}
+    secretKey: khmrsptujherptgoavdgkipartiw3et2w4itnu[pef[e
     accessTokenLifeTime: 30
     refreshTokenLifeTime: 60
 authority:
   id:
-    admin: ${ADMIN}
+    admin: admin
