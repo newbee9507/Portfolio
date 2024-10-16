@@ -28,7 +28,7 @@ public interface OrderMapper {
         result.setAddress(order.getAddress());
         result.setOrderTime(order.getOrderTime());
 
-        String arrivalTime = Objects.isNull(order.getArrivalTime()) ? ""
+        String arrivalTime = Objects.isNull(order.getArrivalTime()) ? "Not Arrival" : order.getArrivalTime();
         result.setArrivalTime(arrivalTime);
 
         List<Long> itemIdList = order.getItemList().stream().map(OrderItem::getItem).map(Item::getItemId).toList();
