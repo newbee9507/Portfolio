@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/re
-    username: root
-    password: 1234
+    url: ${DB_ENDPOINT}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 #  h2:
 #    console:
 #      enabled: true
@@ -11,7 +11,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -30,9 +30,9 @@ logging:
             sql: trace
 jwt:
   token:
-    secretKey: khmrsptujherptgoavdgkipartiw3et2w4itnu[pef[e
+    secretKey: ${JWT_KEY}
     accessTokenLifeTime: 30
     refreshTokenLifeTime: 60
 authority:
   id:
-    admin: admin
+    admin: ${ADMIN}

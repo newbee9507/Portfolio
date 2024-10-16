@@ -29,5 +29,4 @@ public class MemberAuthorityUtils {
         return roles.stream().map(str -> new SimpleGrantedAuthority("ROLE_" + str))
                              .collect(Collectors.toList());
     }
-
 }
