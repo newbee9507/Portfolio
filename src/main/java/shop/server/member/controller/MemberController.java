@@ -26,6 +26,7 @@ public class MemberController {
 
     private final MemberService service;
 
+    @TimeLog
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signUp(@RequestBody @Validated MemberSaveDto dto) {
         MemberResponseDto response = service.save(dto);
@@ -41,6 +42,7 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @TimeLog
     @PatchMapping("/update/{memberId}")
     public ResponseEntity<MemberResponseDto> updateInfo(@AuthenticationPrincipal MemberDetails member,
                                                         @PathVariable @Positive Long memberId,
@@ -53,6 +55,7 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @TimeLog
     @PatchMapping("/addPoint/{memberId}/{point}")
     public ResponseEntity<MemberResponseDto> addPoint(@AuthenticationPrincipal MemberDetails member,
                                                       @PathVariable @Positive Long memberId,
@@ -62,6 +65,7 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @TimeLog
     @DeleteMapping("/delete/{memberId}")
     public MemberResponseDto deleteMember(@AuthenticationPrincipal MemberDetails member,
                                           @PathVariable @Positive Long memberId) {

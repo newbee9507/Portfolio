@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import shop.server.aop.annotation.TimeLog;
 import shop.server.auth.memberdetails.MemberDetails;
 import shop.server.basket.dto.BasketResponseDto;
 import shop.server.basket.service.BasketService;
@@ -17,12 +18,14 @@ public class BasketController {
 
     private final BasketService service;
 
+    @TimeLog
     @GetMapping("/info")
     public ResponseEntity<BasketResponseDto> infoBasket(@AuthenticationPrincipal MemberDetails member) {
         BasketResponseDto result = service.info(member.getMemberId());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @TimeLog
     @PostMapping("/add/{itemId}/{quantity}")
     public ResponseEntity<BasketResponseDto> inputBasket(@AuthenticationPrincipal MemberDetails member,
                               @PathVariable @Positive Long itemId,
@@ -30,7 +33,7 @@ public class BasketController {
         BasketResponseDto result = service.input(member.getMemberId(), itemId, quantity);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
+    @TimeLog
     @PatchMapping("/modifyQuantity/{itemId}/{quantity}")
     public ResponseEntity<BasketResponseDto> modifyQuantity(@AuthenticationPrincipal MemberDetails member,
                                                             @PathVariable @Positive Long itemId,
@@ -39,12 +42,14 @@ public class BasketController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @TimeLog
     @PatchMapping("/clear")
     public ResponseEntity<BasketResponseDto> clearBasket(@AuthenticationPrincipal MemberDetails member) {
         BasketResponseDto result = service.clearBasket(member.getMemberId());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @TimeLog
     @DeleteMapping("/delete/{itemId}")
     public ResponseEntity<BasketResponseDto> deleteToBasket(@AuthenticationPrincipal MemberDetails member,
                                                             @PathVariable @Positive Long itemId) {

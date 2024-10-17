@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import shop.server.aop.annotation.TimeLog;
 import shop.server.auth.memberdetails.MemberDetails;
 import shop.server.exception.error.item.ItemExMessage;
 import shop.server.exception.error.item.ItemException;
@@ -27,12 +28,14 @@ public class ItemController {
 
     private final String[] conditions = new String[]{"name", "company", "minPrice", "maxPrice"};
 
+    @TimeLog
     @GetMapping("/info/{itemId}")
     public ResponseEntity<ItemResponseDto> getItemInfo(@PathVariable @Positive Long itemId) {
         ItemResponseDto result = service.information(itemId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @TimeLog
     @GetMapping("/find/conditions")
     public ResponseEntity<List<ItemResponseDto>> findItemsByConditions(
             /** params == conditions */
@@ -46,6 +49,7 @@ public class ItemController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @TimeLog
     @PostMapping("/regist")
     public ResponseEntity<ItemResponseDto> addNewItem(@AuthenticationPrincipal MemberDetails admin,
                                                       @RequestBody @Valid ItemRegistrationDto registrationDto) {
@@ -53,6 +57,7 @@ public class ItemController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
+    @TimeLog
     @PatchMapping("/update/{itemId}")
     public ResponseEntity<ItemResponseDto> updateItemInfo(@AuthenticationPrincipal MemberDetails admin,
                                                           @RequestBody @Valid ItemUpdateDto updateDto,
@@ -64,6 +69,7 @@ public class ItemController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @TimeLog
     @DeleteMapping("/delete/{itemId}")
     public ResponseEntity<ItemResponseDto> deleteItem(@AuthenticationPrincipal MemberDetails admin,
                                                       @PathVariable Long itemId) {

@@ -3,6 +3,8 @@ package shop.server.aop.aspect;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import shop.server.auth.memberdetails.MemberDetails;
+import shop.server.exception.error.MyShopException;
 import shop.server.exception.error.member.MemberException;
 import shop.server.member.dtos.MemberResponseDto;
 import shop.server.member.dtos.MemberSaveDto;
@@ -12,33 +14,32 @@ import shop.server.member.entity.Member;
 @Aspect
 public class MemberAspect {
 
-    @Pointcut("execution(* shop.server.member..*(..))")
-    public void memberPackage(){}
+    @Pointcut("execution(* shop.server..*(..))")
+    public void appPointcut(){}
 
-    @Before("memberPackage() && bean(*Service) && args(obj,..)")
-    public void serviceStart(JoinPoint joinPoint, Object obj) {
+    @Pointcut("execution(* *(shop.server.auth.memberdetails.MemberDetails, ..))")
+    public void MemberDetailsPointcut(){}
+
+    @Before("appPointcut() && MemberDetailsPointcut()")
+    public void requestStart(JoinPoint joinPoint) {
         String method = joinPoint.getSignature().getName();
-        Long memberId = null;
-        if (obj instanceof MemberSaveDto saveDto) {
-            log.info("[{}]로 {} 요청", saveDto.getId(), method);
-        } else if (obj instanceof Member member) {
-            memberId = member.getMemberId();
-        } else
-            memberId = (Long) obj;
-            log.info("[{}]번 회원이 [{}] 요청", memberId, method);
+        MemberDetails member = (MemberDetails) joinPoint.getArgs()[0];
 
+        log.info("[{}]번 회원이 [{}] 요청", member.getMemberId(), method);
     }
 
-    @AfterReturning(value = "memberPackage() && bean(*Service)",
-            returning = "result")
-    public void serviceEnd(JoinPoint joinPoint, MemberResponseDto result) {
-        String request = joinPoint.getSignature().getName();
-        log.info("[{}번] 회원의 [{}] 요청 정상반환", result.getMemberId(), request);
+    @AfterReturning("MappPointcut() && MemberDetailsPointcut()")
+    public void requestEnd(JoinPoint joinPoint) {
+        String method = joinPoint.getSignature().getName();
+        MemberDetails member = (MemberDetails) joinPoint.getArgs()[0];
+
+        log.info("[{}번] 회원의 [{}] 요청 정상반환", member.getMemberId(), method);
     }
 
-    @AfterThrowing(value = "memberPackage() && bean(*Service) && args(memberId,..)", throwing = "ex")
-    public void serviceError(JoinPoint joinPoint, MemberException ex, Long memberId) {
+    @AfterThrowing(value = "appPointcut() && MemberDetailsPointcut()", throwing = "ex")
+    public void requestError(JoinPoint joinPoint, MyShopException ex) {
         String method = joinPoint.getSignature().getName();
-        log.info("{}번 회원 {} 요청 에러. -> {}",memberId, method, ex.getMessage());
+        MemberDetails member = (MemberDetails) joinPoint.getArgs()[0];
+        log.info("{}번 회원 {} 요청 에러. -> {}",member.getMemberId(), method, ex.getMessage());
     }
 }
