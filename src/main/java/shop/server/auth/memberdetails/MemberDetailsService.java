@@ -22,7 +22,7 @@ public class MemberDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
-//    @Cacheable(value = "member", key = "#id")
+    @Cacheable(value = "member", key = "#id")
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
         MemberDetailDto member = memberRepository.findMemberToDetailDto(id);
         if (Objects.isNull(member)) {

@@ -80,9 +80,6 @@ public class MemberService {
     public MemberResponseDto deleteMember(Long memberId) {
         return repository.delete(memberId);
     }
-    public String test(Long memberId) {
-        return repository.notOptimizationDelete(memberId);
-    }
 
     public Member findByMemberIdFetchOrderList(Long memberId) {
         return repository.findByIdFetchOrderList(memberId);
