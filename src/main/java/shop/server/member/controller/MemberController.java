@@ -70,10 +70,8 @@ public class MemberController {
     public ResponseEntity<MemberResponseDto> deleteMember(@AuthenticationPrincipal MemberDetails member,
                                           @PathVariable @Positive Long memberId) {
         checkMember(member, memberId);
-//        MemberResponseDto result = service.deleteMember(memberId);
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-        String test = service.test(memberId);
-        return new ResponseEntity<>(new MemberResponseDto(1L, "a", "a", 0), HttpStatus.OK);
+        MemberResponseDto result = service.deleteMember(memberId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     private boolean checkMember(MemberDetails member, Long memberId) {

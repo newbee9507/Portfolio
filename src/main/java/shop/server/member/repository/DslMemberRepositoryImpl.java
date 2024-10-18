@@ -82,24 +82,6 @@ public class DslMemberRepositoryImpl implements DslMemberRepository{
     }
 
     @Override
-    public String notOptimizationDelete(Long memberId) {
-        Member targetMember = queryFactory.select(member)
-                .from(member)
-                .where(member.memberId.eq(memberId)).fetchOne();
-
-        Basket targetBasket = targetMember.getBasket();
-        List<Order> orderList = targetMember.getOrderList();
-        List<BasketItem> basketItems = targetBasket.getBasketItems();
-
-        basketItems.clear();
-        queryFactory.delete(basket).where(basket.basketId.eq(memberId));
-        orderList.stream().map(Order::getItemList).forEach(List::clear);
-        queryFactory.delete(order);
-        queryFactory.delete(member).where(member.memberId.eq(memberId));
-        return "ok";
-    }
-
-    @Override
     public MemberResponseDto delete(Long memberId) {
         Member targetMember = queryFactory.select(member)
                 .from(member)

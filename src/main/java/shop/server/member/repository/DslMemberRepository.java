@@ -22,6 +22,4 @@ public interface DslMemberRepository {
 
     Member findByIdFetchOrderList(Long memberId);
 
-    String notOptimizationDelete(Long memberId);
-
 }
