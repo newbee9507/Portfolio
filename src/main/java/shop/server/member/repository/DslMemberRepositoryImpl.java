@@ -16,6 +16,7 @@ import shop.server.member.entity.Member;
 import shop.server.order.entity.Order;
 import shop.server.order.entity.OrderItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -80,150 +81,23 @@ public class DslMemberRepositoryImpl implements DslMemberRepository{
         return Optional.ofNullable(result);
     }
 
-//    public void selectDelete(Long memberId) {
-//        // 기능실험.txt에 있는 쿼리는 맴버 - 오더 - 오더아이템(서브쿼리로한번에) 바스켓 - 바스켓아이템 -> 여기는 언제삭제쿼리를? -> 다 찾고 가장 마지막에
-//        Member targetMember = queryFactory.select(member)
-//                .from(member)
-//                .leftJoin(member.orderList).fetchJoin() // 외부조인하지 않으면, 주문내역이 없는 회원을 찾아오지 못함
-//                .join(member.basket).fetchJoin()
-//                .join(basketItem.basket).fetchJoin()
-//                .where(member.memberId.eq(memberId)).fetchOne();
-//        //12:27시점에는 맴버오더리스트 - 오더아이템(서브쿼리로 한번에) - 오더아이템 삭제 - 오더 삭제 -
-//        /**
-//         * 쿼리
-//         * [Hibernate]
-//         *     select
-//         *         m1_0.member_id,
-//         *         m1_0.basket_basket_id,
-//         *         b1_0.basket_id,
-//         *         m1_0.id,
-//         *         m1_0.nick_name,
-//         *         ol1_0.member_id,
-//         *         ol1_0.order_id,
-//         *         ol1_0.address,
-//         *         ol1_0.arrival_time,
-//         *         ol1_0.order_time,
-//         *         ol1_0.total_price,
-//         *         m1_0.pass_word,
-//         *         m1_0.point,
-//         *         m1_0.roles
-//         *     from
-//         *         member m1_0
-//         *     left join
-//         *         orders ol1_0
-//         *             on m1_0.member_id=ol1_0.member_id
-//         *     join
-//         *         basket b1_0
-//         *             on b1_0.basket_id=m1_0.basket_basket_id
-//         *     where
-//         *         m1_0.member_id=?
-//         */
-//        log.info("멤버오더리스트==================================================================");
-//
-//        /**
-//         *  오더먼저 삭제시 오더아이템 외래키 제약조건 위배
-//         *  List<Long> orderIdList = member1.getOrderList().stream().map(Order::getOrderId).toList();
-//         *  queryFactory.delete(order).where(order.orderId.in(orderIdList)).execute();
-//         */
-//        List<Long> OrderItemIdList =
-//                targetMember.getOrderList().stream().map(Order::getItemList).flatMap(List::stream).map(OrderItem::getOrderItemId).toList();
-//        long oicount = queryFactory.delete(orderItem).where(orderItem.orderItemId.in(OrderItemIdList)).execute();
-//        /** 쿼리
-//         * [Hibernate]
-//         *     select
-//         *         il1_0.order_id,
-//         *         il1_0.order_item_id,
-//         *         il1_0.item_id,
-//         *         il1_0.quantity
-//         *     from
-//         *         order_item il1_0
-//         *     where
-//         *         il1_0.order_id in (select
-//         *             ol1_0.order_id
-//         *         from
-//         *             member m1_0
-//         *         join
-//         *             orders ol1_0
-//         *                 on m1_0.member_id=ol1_0.member_id
-//         *         where
-//         *             m1_0.member_id=?)
-//         * [Hibernate]
-//         *     delete oi1_0
-//         *     from
-//         *         order_item oi1_0
-//         *     where
-//         *         oi1_0.order_item_id in (?, ?, ?)
-//         */
-//        log.info("삭제된 오더아이템 = {},======================================================================", oicount);
-//
-//        List<Long> orderIdList = targetMember.getOrderList().stream().map(Order::getOrderId).toList();
-//        long ocount = queryFactory.delete(order).where(order.orderId.in(orderIdList)).execute();
-//        log.info("삭제된 오더 = {}==============================================================",ocount);
-//
-//        Basket targetBasket = targetMember.getBasket();
-//        log.info("targetBasket = {}", targetBasket.getBasketId());
-//        List<BasketItem> basketItems = targetBasket.getBasketItems();
-//        for (BasketItem item : basketItems) {
-//            log.info("basketItemList = {}", item.getBasketItemId());
-//        }
-//        /**
-//         * 페치조인 있을떄 + @Fetch(FetchMode.SUBSELECT) 여부에 따라 다름
-//         * 오더들삭제===========================================================================
-//         * 2024-09-21T13:00:24.851+09:00  INFO 4100 --- [nio-8080-exec-2] s.s.m.r.DslMemberRepositoryImpl          : targetBasket = 4
-//         * [Hibernate]
-//         *     select
-//         *         bi1_0.basket_id,
-//         *         bi1_0.basket_item_id,
-//         *         bi1_0.item_id,
-//         *         bi1_0.quantity
-//         *     from
-//         *         basket_item bi1_0
-//         *     where                                @Fetch가 없으면 단순하게 bi1_0.basket_id=?로 쿼리를 날림
-//         *         bi1_0.basket_id in (select
-//         *             b1_0.basket_id
-//         *         from
-//         *             member m1_0
-//         *         join
-//         *             orders ol1_0
-//         *                 on m1_0.member_id=ol1_0.member_id
-//         *         join
-//         *             basket b1_0
-//         *                 on b1_0.basket_id=m1_0.basket_basket_id
-//         *         where
-//         *             m1_0.member_id=?)
-//         */
-//        /**
-//         * 페치조인없을떄
-//         * 오더들삭제===========================================================================
-//         * 2024-09-21T12:59:16.273+09:00  INFO 9492 --- [nio-8080-exec-2] s.s.m.r.DslMemberRepositoryImpl          : targetBasket = 4
-//         * [Hibernate]
-//         *     select
-//         *         b1_0.basket_id
-//         *     from
-//         *         basket b1_0
-//         *     where
-//         *         b1_0.basket_id=?
-//         * [Hibernate]
-//         *     select
-//         *         bi1_0.basket_id,
-//         *         bi1_0.basket_item_id,
-//         *         bi1_0.item_id,
-//         *         bi1_0.quantity
-//         *     from
-//         *         basket_item bi1_0
-//         *     where
-//         *         bi1_0.basket_id=?
-//         * 2024-09-21T12:59:16.280+09:00  INFO 9492 --- [nio-8080-exec-2] s.s.m.r.DslMemberRepositoryImpl          : basketItemList = 22
-//         * 2024-09-21T12:59:16.280+09:00  INFO 9492 --- [nio-8080-exec-2] s.s.m.r.DslMemberRepositoryImpl          : basketItemList = 26
-//         * 2024-09-21T12:59:16.280+09:00  INFO 9492 --- [nio-8080-exec-2] s.s.m.r.DslMemberRepositoryImpl          : basketItemList = 27
-//         * 2024-09-21T12:59:16.280+09:00  INFO 9492 --- [nio-8080-exec-2] s.s.m.r.DslMemberRepositoryImpl          :
-//         */
-//        long basketitemcount = queryFactory.delete(basketItem).where(basketItem.in(basketItems)).execute();
-//        log.info("삭제된 바스켓아이템 = {},=====================================================================",basketitemcount);
-//        queryFactory.delete(basket).where(basket.basketId.eq(targetMember.getMemberId()));
-//        log.info("바스켓삭제===========================================================================");
-//        queryFactory.delete(member).execute();
-//    }
+    @Override
+    public String notOptimizationDelete(Long memberId) {
+        Member targetMember = queryFactory.select(member)
+                .from(member)
+                .where(member.memberId.eq(memberId)).fetchOne();
+
+        Basket targetBasket = targetMember.getBasket();
+        List<Order> orderList = targetMember.getOrderList();
+        List<BasketItem> basketItems = targetBasket.getBasketItems();
+
+        basketItems.clear();
+        queryFactory.delete(basket).where(basket.basketId.eq(memberId));
+        orderList.stream().map(Order::getItemList).forEach(List::clear);
+        queryFactory.delete(order);
+        queryFactory.delete(member).where(member.memberId.eq(memberId));
+        return "ok";
+    }
 
     @Override
     public MemberResponseDto delete(Long memberId) {

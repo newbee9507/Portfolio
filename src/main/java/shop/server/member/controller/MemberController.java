@@ -67,10 +67,13 @@ public class MemberController {
 
     @TimeLog
     @DeleteMapping("/delete/{memberId}")
-    public MemberResponseDto deleteMember(@AuthenticationPrincipal MemberDetails member,
+    public ResponseEntity<MemberResponseDto> deleteMember(@AuthenticationPrincipal MemberDetails member,
                                           @PathVariable @Positive Long memberId) {
         checkMember(member, memberId);
-        return service.deleteMember(memberId);
+//        MemberResponseDto result = service.deleteMember(memberId);
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+        String test = service.test(memberId);
+        return new ResponseEntity<>(new MemberResponseDto(1L, "a", "a", 0), HttpStatus.OK);
     }
 
     private boolean checkMember(MemberDetails member, Long memberId) {

@@ -1,6 +1,5 @@
 package shop.server.member.repository;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import shop.server.auth.dto.MemberDetailDto;
 import shop.server.member.dtos.MemberResponseDto;
@@ -22,5 +21,7 @@ public interface DslMemberRepository {
     MemberResponseDto delete(Long memberId);
 
     Member findByIdFetchOrderList(Long memberId);
+
+    String notOptimizationDelete(Long memberId);
 
 }
