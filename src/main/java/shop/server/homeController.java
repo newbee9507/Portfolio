@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class homeController {
 
+    private int count = 0;
+
     @GetMapping("/myShop/home")
     public String homePage() {
         return "홈페이지";
@@ -13,6 +15,7 @@ public class homeController {
 
     @GetMapping("/myShop/test")
     public String test() {
-        return "good!";
+        count++;
+        return "Call count = "+count;
     }
 }
